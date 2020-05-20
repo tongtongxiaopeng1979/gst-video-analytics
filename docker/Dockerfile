@@ -9,9 +9,6 @@ ARG gst=gst-internal
 FROM ubuntu:18.04 AS base
 WORKDIR /home
 
-RUN git config --global http.sslVerify false
-RUN git config --global https.sslVerify false
-RUN git config --global http.proxyAuthMethod 'basic'
 
 # COMMON BUILD TOOLS
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
@@ -45,6 +42,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
         python3-setuptools && \
     rm -rf /var/lib/apt/lists/*
 
+RUN git config --global http.sslVerify false
+RUN git config --global https.sslVerify false
+RUN git config --global http.proxyAuthMethod 'basic'
 # Build x264
 ARG X264_VER=stable
 ARG X264_REPO=https://github.com/mirror/x264
