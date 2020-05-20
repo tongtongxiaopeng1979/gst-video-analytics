@@ -9,6 +9,10 @@ ARG gst=gst-internal
 FROM ubuntu:18.04 AS base
 WORKDIR /home
 
+RUN git config --global http.sslVerify false
+RUN git config --global https.sslVerify false
+RUN git config --global http.proxyAuthMethod 'basic'
+
 # COMMON BUILD TOOLS
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     apt-get install -y -q --no-install-recommends \
@@ -184,7 +188,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
 
 # Build the gstreamer plugin base
 ARG GST_PLUGIN_BASE_REPO=https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-${GST_VERSION}.tar.xz
-RUN wget ${GST_PLUGIN_BASE_REPO} -O build/src/gst-plugins-base-${GST_VERSION}.tar.xz
+RUN wget --no-check-certificate ${GST_PLUGIN_BASE_REPO} -O build/src/gst-plugins-base-${GST_VERSION}.tar.xz
 RUN tar xvf build/src/gst-plugins-base-${GST_VERSION}.tar.xz && \
     cd gst-plugins-base-${GST_VERSION} && \
     PKG_CONFIG_PATH=$PWD/build/pkgconfig:${PKG_CONFIG_PATH} meson \
